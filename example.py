@@ -1,18 +1,20 @@
+# import skeleton langauge-framework
 from skeleton import Skeleton
 
-# Reading from file
+# read content from file 
 with open('skellang.txt') as file:
-  skellang = file.read()
+  skellang_content = file.read()
 
-lang = Skeleton(skellang)
+# create langauge 
+lang = Skeleton(skellang_content)
 
-@lang.action("out `message`")
+# add langauge keyword
+@lang.action(statement="out `message`")
 def out(args):
-  print(args['message'])
+  print(
+    args['message']
+  )
 
-@lang.action("loop `times` `message`")
-def loop(args):
-  for _ in range(int(args['times'])):
-    print(args['message'])
 
+# execute created langauge
 lang.execute()

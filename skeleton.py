@@ -15,7 +15,7 @@ class Skeleton:
       'PARAM': r'`([^`]*)`'
     }
 
-    self.garbage_tokens = ['#']
+    self.garbage_tokens = ['/']
 
     self.replacements = {
       "_": " "
