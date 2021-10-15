@@ -1,3 +1,8 @@
-out `
-Welcome to Skellang!
+/you can use python in skellang;
+
+out `You can use Python in skellang!`; py `
+import tkinter as tk
+
+window = tk.Tk()
+window.mainloop()
 `;

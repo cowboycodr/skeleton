@@ -3,5 +3,6 @@ High-level langauge-framework to automate parsing and allow developers to create
 
 ## State
 - [x] Keywords & Keyword-params
+- [ ] Folder Structure & Pip Package
 - [ ] Variables
 - [ ] Functions

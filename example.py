@@ -15,6 +15,14 @@ def out(args):
     args['message']
   )
 
+@lang.action(statement="loop `times` `message`")
+def loop(args):
+  for _ in range(1, int(args['times'])):
+    print(args['message'])
+
+@lang.action(statement="py `code`")
+def py(args):
+  exec(args['code'])
 
 # execute created langauge
 lang.execute()
