@@ -12,6 +12,7 @@ class Skeleton:
     self.tokens = {
       'SPLIT': ' ',
       'TERMINATOR': ';',
+      'PARAM': r'`([^`]*)`'
     }
 
     self.garbage_tokens = ['#']
@@ -33,7 +34,9 @@ class Skeleton:
         raise Exception(f'Statement: "{action}": conflicts with garbage token: {token}')
 
   def get_queries(self, string: str):
-    queries = re.findall(r'\$(\S*)', string)
+    PARAM = self.tokens['PARAM']
+
+    queries = re.findall(f'{PARAM}', string, re.MULTILINE)
 
     return queries
 
@@ -61,6 +64,7 @@ class Skeleton:
 
     # TOKENS
     SPLIT = self.tokens['SPLIT']
+    PARAM = self.tokens['PARAM']
 
     # Cleans the language
     if not strict:
@@ -69,7 +73,7 @@ class Skeleton:
     keyword = self.__get_statement_keyword(statement)
 
     args = self.get_queries(statement)
-    pattern_string = keyword + ''.join([f'{SPLIT}\$(\S*)'  for arg in args])
+    pattern_string = keyword + ''.join([f'{SPLIT}{PARAM}'  for arg in args])
     # pattern = re.compile(pattern_string)
 
     self.__actions[statement] = {
@@ -90,7 +94,7 @@ class Skeleton:
     self.language = self.clean(self.language)
 
     for statement in self.language.split(TERMINATOR):
-      statement = statement.strip()
+      statement = statement.strip().replace('\n', '').replace(r'\n', ' ')
       executed = False
       for (action_statement, action) in unpack_dictionary(self.__actions):
 
@@ -105,5 +109,5 @@ class Skeleton:
 
           action['func'](statement_args)
           executed = True
-      if not executed and not len(statement) < 1:
-        raise Exception(f'"{statement}" is not a valid statement')
+      if not executed and not len(statement) < 1 and statement[0] not in self.garbage_tokens:
+         raise Exception(f'"{statement}" is not a valid statement')

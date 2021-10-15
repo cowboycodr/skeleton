@@ -1,25 +1,18 @@
 from skeleton import Skeleton
 
-import js2py
-
+# Reading from file
 with open('skellang.txt') as file:
   skellang = file.read()
 
-langauge = Skeleton(skellang)
+lang = Skeleton(skellang)
 
-@langauge.action("log $message")
-def log(args):
-  MESSAGE = args["message"].replace('_', ' ')
+@lang.action("out `message`")
+def out(args):
+  print(args['message'])
 
-  print(MESSAGE)
+@lang.action("loop `times` `message`")
+def loop(args):
+  for _ in range(int(args['times'])):
+    print(args['message'])
 
-@langauge.action("py $code")
-def exe(args):
-  eval(args["code"].replace('_', ' '))
-
-@langauge.action("js $code")
-def js(args):
-  print(js2py.eval_js(args['code'].replace('_', ' ')))
-
-langauge.tokens["TERMINATOR"] = "\n"
-langauge.execute()
+lang.execute()

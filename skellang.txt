@@ -1,1 +1,1 @@
-log $Welcome_to_Skellang
+loop `5` `message`
