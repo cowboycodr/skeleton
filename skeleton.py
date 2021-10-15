@@ -73,7 +73,7 @@ class Skeleton:
     keyword = self.__get_statement_keyword(statement)
 
     args = self.get_queries(statement)
-    pattern_string = r'(.*)' + keyword + ''.join([f'{SPLIT}{PARAM}'  for arg in args])
+    pattern_string = r'(\W*)' + keyword + ''.join([f'{SPLIT}{PARAM}'  for arg in args])
     # pattern = re.compile(pattern_string)
 
     self.__actions[statement] = {

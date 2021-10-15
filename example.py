@@ -1,28 +1,23 @@
-# import skeleton langauge-framework
+# Rapidly creating a programming language with Skeleton framework!
 from skeleton import Skeleton
 
-# read content from file 
 with open('skellang.txt') as file:
-  skellang_content = file.read()
+  skellang = file.read()
 
-# create langauge 
-lang = Skeleton(skellang_content)
+lang = Skeleton(skellang)
 
-# add langauge keyword
-@lang.action(statement="out `message`")
+@lang.action('out `message`')
 def out(args):
-  print(
-    args['message']
-  )
+  print(args['message'])
 
-@lang.action(statement="loop `times` `message`")
-def loop(args):
-  for _ in range(1, int(args['times'])):
-    print(args['message'])
-
-@lang.action(statement="py `code`")
+@lang.action('py `code`')
 def py(args):
   exec(args['code'])
 
-# execute created langauge
+@lang.action('timeout `time`')
+def timeout(args):
+  import time as t
+
+  t.sleep(float(args['time']))
+
 lang.execute()
