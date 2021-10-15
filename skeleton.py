@@ -15,7 +15,7 @@ class Skeleton:
       'TERMINATOR': ';',
     }
 
-    self.garbage_tokens = []
+    self.garbage_tokens = ['#']
 
     self.__actions = {}
 
@@ -43,12 +43,11 @@ class Skeleton:
 
     result = ''
 
+    string = string.strip('\r\n')
+
     for word in string.split(SPLIT):
       if word not in self.garbage_tokens:
-        if len(result) < 0:
-          result += word + SPLIT
-        else:
-          result += SPLIT + word + SPLIT
+        result += word + SPLIT
 
     return result
 
@@ -67,13 +66,13 @@ class Skeleton:
     keyword = self.__get_statement_keyword(statement)
 
     args = self.get_queries(statement)
-    pattern_string = keyword + str([f'{SPLIT}${arg}'  for arg in args])
-    pattern = re.compile(pattern_string)
+    pattern_string = keyword + ''.join([f'{SPLIT}\$(\S*)'  for arg in args])
+    # pattern = re.compile(pattern_string)
 
     self.__actions[statement] = {
       'func': action,
       'args': args,
-      'pattern': pattern,
+      'pattern': pattern_string,
       'keyword': keyword
     }
 
@@ -82,16 +81,16 @@ class Skeleton:
       self.add_action(statement=statement, action=function, strict=strict)
     return decorator
 
-  def execute(self, strict: bool = False):
+  def execute(self):
     TERMINATOR = self.tokens['TERMINATOR']
 
-    if not strict:
-      self.language = self.clean(self.language)
+    self.language = self.clean(self.language)
 
     for statement in self.language.split(TERMINATOR):
+      statement = statement.strip()
       for (action_statement, action) in unpack_dictionary(self.__actions):
 
-        if action['pattern'].match(statement):
+        if re.compile(action['pattern']).match(statement):
           statement_queries = self.get_queries(statement)
 
           action_args = action['args']
