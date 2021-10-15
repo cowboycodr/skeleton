@@ -1,6 +1,7 @@
 # Skeleton langauge framework
 
 import re
+from functools import wraps
 
 from utils import unpack_dictionary
 
@@ -75,6 +76,11 @@ class Skeleton:
       'pattern': pattern,
       'keyword': keyword
     }
+
+  def action(self, statement: str, strict: bool = False):
+    def decorator(function):
+      self.add_action(statement=statement, action=function, strict=strict)
+    return decorator
 
   def execute(self, strict: bool = False):
     TERMINATOR = self.tokens['TERMINATOR']

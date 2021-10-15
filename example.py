@@ -6,13 +6,10 @@ log $Welcome_to_Skellang!
 
 langauge = Skeleton(skellang)
 
-def log(args): 
-  MESSAGE = args['message']
-  print(MESSAGE.replace('_', ' '))
+@langauge.action(statement="log $message")
+def log(args):
+  MESSAGE = args['message'].replace('_', ' ')
 
-langauge.add_action(
-  'log $message',
-  log
-)
+  print(MESSAGE)
 
 langauge.execute()
