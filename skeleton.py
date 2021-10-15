@@ -1,7 +1,6 @@
 # Skeleton langauge framework
 
 import re
-from functools import wraps
 
 from utils import unpack_dictionary
 
@@ -16,6 +15,10 @@ class Skeleton:
     }
 
     self.garbage_tokens = ['#']
+
+    self.replacements = {
+      "_": " "
+    }
 
     self.__actions = {}
 
@@ -88,6 +91,7 @@ class Skeleton:
 
     for statement in self.language.split(TERMINATOR):
       statement = statement.strip()
+      executed = False
       for (action_statement, action) in unpack_dictionary(self.__actions):
 
         if re.compile(action['pattern']).match(statement):
@@ -100,3 +104,6 @@ class Skeleton:
             statement_args[action_args[arg]] = statement_queries[arg]
 
           action['func'](statement_args)
+          executed = True
+      if not executed and not len(statement) < 1:
+        raise Exception(f'"{statement}" is not a valid statement')
