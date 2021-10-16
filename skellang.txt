@@ -1,2 +1,1 @@
-out `Welcome to Skellang!`;
-out `The World loves Skellang!`;
+concat `Kian ` and `McKenna`

@@ -1,4 +1,3 @@
-# Rapidly creating a programming language with Skeleton framework!
 from skeleton import Skeleton
 
 with open('skellang.txt') as file:
@@ -6,18 +5,16 @@ with open('skellang.txt') as file:
 
 lang = Skeleton(skellang)
 
-@lang.action('out `message`')
-def out(args):
-  print(args['message'])
+vars = {}
 
-@lang.action('py `code`')
-def py(args):
-  exec(args['code'])
+def add_vars(string):
+  for key in vars:
+    string = string.replace(key, vars[key])
 
-@lang.action('timeout `time`')
-def timeout(args):
-  import time as t
+  return string
 
-  t.sleep(float(args['time']))
+@lang.keyword('concat `string` and `string1`')
+def concat(args):
+  print(args['string'] + args['string1'])
 
 lang.execute()

@@ -12,6 +12,7 @@ class Skeleton:
     self.tokens = {
       'SPLIT': ' ',
       'TERMINATOR': ';',
+      'WORD': r'([^\s]*)',
       'PARAM': r'`([^`]*)`'
     }
 
@@ -23,10 +24,7 @@ class Skeleton:
 
     self.__actions = {}
 
-  def __get_statement_keyword(self, statement):
-    return statement.split(self.tokens['SPLIT'])[0]
-
-  def __validate_action(self, action: str):
+  def __validate_keyword(self, action: str):
     # Validates the action and tell whether its necessary
 
     for token in self.garbage_tokens:
@@ -57,35 +55,37 @@ class Skeleton:
 
     return result
 
-  def add_action(self, statement: str, action,  strict: bool = False):
-    # TODO: Convert to decorator
-
-    self.__validate_action(statement)
+  def add_keyword(self, statement: str, action):
+    self.__validate_keyword(statement)
 
     # TOKENS
     SPLIT = self.tokens['SPLIT']
+    WORD = self.tokens['WORD']
     PARAM = self.tokens['PARAM']
+    PARAM_REGEX = re.compile(PARAM)
 
-    # Cleans the language
-    if not strict:
-      statement = self.clean(statement)
+    statement = self.clean(statement)
 
-    keyword = self.__get_statement_keyword(statement)
+    pattern_string = r'(\W*)'
 
+    for word in statement.split(SPLIT)[:-1]:
+      if PARAM_REGEX.match(word):
+        pattern_string += (PARAM + SPLIT)
+      else:
+        pattern_string += (word + SPLIT)
+
+    pattern_string = pattern_string[:-1] + r'(\W*)'
     args = self.get_queries(statement)
-    pattern_string = r'(\W*)' + keyword + ''.join([f'{SPLIT}{PARAM}'  for arg in args])
-    # pattern = re.compile(pattern_string)
 
     self.__actions[statement] = {
       'func': action,
       'args': args,
-      'pattern': pattern_string,
-      'keyword': keyword
+      'pattern': pattern_string
     }
 
-  def action(self, statement: str, strict: bool = False):
+  def keyword(self, statement: str):
     def decorator(function):
-      self.add_action(statement=statement, action=function, strict=strict)
+      self.add_keyword(statement=statement, action=function)
     return decorator
 
   def execute(self):
