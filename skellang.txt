@@ -1,1 +1,1 @@
-concat `Kian ` and `McKenna`
+out (py `1 + 2`)
