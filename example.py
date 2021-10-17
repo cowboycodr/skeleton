@@ -28,25 +28,14 @@ def assign(args):
 
   vars[NAME] = VALUE
 
+@lang.keyword("concat `1` `2`")
+def concat(args):
+  return (
+    add_vars(args['1']) + add_vars(args['2'])
+    )
+
 @lang.keyword("out `message`")
-def out(args):
-  MESSAGE = args['message']
-
-  print(MESSAGE)
-
-@lang.keyword("py `code`")
-def py(args):
-  CODE = add_vars(args['code'])
-
-  return eval(CODE)
-
-@lang.keyword("eval `code`")
-def evaluate(args):
-  CODE = add_vars(args['code']).replace('"', '`')
-
-  try:
-    lang.evaluate(CODE)
-  except:
-    raise Exception("Not working!")
+def print_message(args):
+  print(add_vars(args['message']))
 
 lang.execute()

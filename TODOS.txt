@@ -1,5 +1,1 @@
-Loops
-
-Multiple keywords:
-  Example: 
-    'for $param in $param2'
+1. Integrate standard and priority statements together

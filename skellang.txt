@@ -1,1 +1,6 @@
-out (py `1 + 2`)
+`first_name`=`Kian`;
+`last_name`=`McKenna`;
+
+`full_name`=(concat `first_name` `last_name`);
+
+out `full_name`;

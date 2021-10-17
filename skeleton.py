@@ -97,6 +97,7 @@ class Skeleton:
     TERMINATOR = self.tokens['TERMINATOR']
     PRIORITIZE = self.tokens['PRIORITIZE']
 
+    # TODO: Integrate priority with standard statements
     # Priority statement execution
     for match in re.findall(PRIORITIZE, string, re.MULTILINE):
       statement = match
